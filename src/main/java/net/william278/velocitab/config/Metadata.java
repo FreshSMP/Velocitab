@@ -36,24 +36,13 @@ import java.util.regex.Pattern;
 public class Metadata {
 
     private String velocityApiVersion;
-    private int velocityMinimumBuild;
     private String papiProxyBridgeMinimumVersion;
 
     public void validateApiVersion(@NotNull Version version) {
         if (version.compareTo(Version.fromString(velocityApiVersion)) < 0) {
             final String serverVersion = version.toStringWithoutMetadata();
             throw new IllegalStateException("Your Velocity API version (" + serverVersion + ") is not supported! " +
-                    "Disabling Velocitab. Please update to at least Velocity v" + velocityApiVersion
-                    + " build #" + velocityMinimumBuild + " or newer.");
-        }
-    }
-
-    public void validateBuild(@NotNull Version version) {
-        int serverBuild = getBuildNumber(version.toString());
-        if (serverBuild < velocityMinimumBuild) {
-            throw new IllegalStateException("Your Velocity build version (#" + serverBuild + ") is not supported! " +
-                    "Disabling Velocitab. Please update to at least Velocity v" + velocityApiVersion
-                    + " build #" + velocityMinimumBuild + " or newer.");
+                    "Disabling Velocitab. Please update to at least Velocity v" + velocityApiVersion + ".");
         }
     }
 
@@ -63,14 +52,6 @@ public class Metadata {
             throw new IllegalStateException("Your PAPIProxyBridge version (" + serverVersion + ") is not supported! " +
                     "Disabling Velocitab. Please update to at least PAPIProxyBridge v" + papiProxyBridgeMinimumVersion  + ".");
         }
-    }
-
-    private int getBuildNumber(@NotNull String proxyVersion) {
-        final Matcher matcher = Pattern.compile(".*-b(\\d+).*").matcher(proxyVersion);
-        if (matcher.find(1)) {
-            return Integer.parseInt(matcher.group(1));
-        }
-        throw new IllegalArgumentException("No build number found for proxy version: " + proxyVersion);
     }
 
 }

@@ -138,7 +138,6 @@ public interface ConfigProvider {
         final Metadata metadata = getMetadata();
         final Version proxyVersion = getVelocityVersion();
         metadata.validateApiVersion(proxyVersion);
-        metadata.validateBuild(proxyVersion);
 
         // Validate PAPIProxyBridge hook version
         final Optional<Version> papiProxyBridgeVersion = getPapiProxyBridgeVersion();
